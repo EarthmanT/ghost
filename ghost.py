@@ -239,22 +239,22 @@ class Stash(object):
             metadata=metadata,
             uid=uid))
 
-    def get(self, key_name, decrypt=True):
+    def get(self, key_id, decrypt=True):
         """Return a key with its parameters if it was found.
         """
-        key = self._storage.get(key_name).copy()
+        key = self._storage.get(key_id).copy()
         if not key.get('value'):
             return None
         if decrypt:
             key['value'] = self._decrypt(key['value'])
         return key
 
-    def delete(self, key_name):
+    def delete(self, key_id):
         """Delete a key if it exists.
         """
-        deleted = self._storage.delete(key_name)
+        deleted = self._storage.delete(key_id)
         if not deleted:
-            raise GhostError('Key {0} not found'.format(key_name))
+            raise GhostError('Key {0} not found'.format(key_id))
 
     def list(self):
         """Return a list of all keys.
@@ -936,7 +936,7 @@ def get_key(key_name, jsonify, no_decrypt, stash, passphrase, backend):
     passphrase = passphrase or get_passphrase()
     storage = STORAGE_MAPPING[backend](db_path=stash_path)
     stash = Stash(storage, passphrase=passphrase)
-    record = stash.get(key_name=key_name, decrypt=not no_decrypt)
+    record = stash.get(key_id=key_name, decrypt=not no_decrypt)
     if not record:
         sys.exit('Key {0} not found'.format(key_name))
     if jsonify:
@@ -961,7 +961,7 @@ def delete_key(key_name, stash, passphrase, backend):
     storage = STORAGE_MAPPING[backend](db_path=stash_path)
     stash = Stash(storage, passphrase=passphrase)
     try:
-        stash.delete(key_name=key_name)
+        stash.delete(key_id=key_name)
     except GhostError as ex:
         sys.exit(ex)
 
