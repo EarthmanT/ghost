@@ -761,6 +761,7 @@ class S3Storage(object):
                  aws_secret_access_key=None or os.environ.get('AWS_SECRET_ACCESS_KEY')):
         if not S3_EXISTS:
             raise ImportError('boto3 must be installed first')
+        # self.session = _get_session(...)
         raise NotImplementedError
 
 
