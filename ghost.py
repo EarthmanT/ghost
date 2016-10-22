@@ -758,10 +758,13 @@ class S3Storage(object):
     def __init__(self,
                  db_path=STORAGE_DEFAULT_PATH_MAPPING['s3'],
                  aws_access_key_id=None or os.environ.get('AWS_ACCESS_KEY_ID'),
-                 aws_secret_access_key=None or os.environ.get('AWS_SECRET_ACCESS_KEY')):
+                 aws_secret_access_key=None or os.environ.get('AWS_SECRET_ACCESS_KEY'),
+                 aws_session_token=None or os.environ.get('AWS_SESSION_TOKEN'),
+                 profile_name=None or os.environ.get('AWS_PROFILE')):
         if not S3_EXISTS:
             raise ImportError('boto3 must be installed first')
         # self.session = _get_session(...)
+        self.session = _get_session(aws_access_key_id, aws_secret_access_key, aws_session_token, profile_name)
         raise NotImplementedError
 
     def init(self):
