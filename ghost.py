@@ -819,6 +819,13 @@ class S3Storage(object):
         # return key
         raise NotImplementedError
 
+    def delete(self, key_name):
+        """Delete the key and return true if the key was deleted, else false
+        """
+        # self.client.delete(key_name)
+        # key = self.get(key_name):
+        # return key is {}
+        raise NotImplementedError
 
 def _get_current_time():
     """Return a human readable unix timestamp formatted string
