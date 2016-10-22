@@ -914,7 +914,8 @@ STORAGE_MAPPING = {
     'sqlalchemy': SQLAlchemyStorage,
     'consul': ConsulStorage,
     'vault': VaultStorage,
-    'elasticsearch': ElasticsearchStorage
+    'elasticsearch': ElasticsearchStorage,
+    's3': S3Storage
 }
 
 
