@@ -764,6 +764,11 @@ class S3Storage(object):
         # self.session = _get_session(...)
         raise NotImplementedError
 
+    def init(self):
+        # init stuff
+        raise NotImplementedError
+
+    
 
 
 def _get_current_time():
