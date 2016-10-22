@@ -754,6 +754,17 @@ class ElasticsearchStorage(object):
         return result['hits']['hits'] if result else {}
 
 
+class S3Storage(object):
+    def __init__(self,
+                 db_path=STORAGE_DEFAULT_PATH_MAPPING['s3'],
+                 aws_access_key_id=None or os.environ.get('AWS_ACCESS_KEY_ID'),
+                 aws_secret_access_key=None or os.environ.get('AWS_SECRET_ACCESS_KEY')):
+        if not S3_EXISTS:
+            raise ImportError('boto3 must be installed first')
+        raise NotImplementedError
+
+
+
 def _get_current_time():
     """Return a human readable unix timestamp formatted string
 
