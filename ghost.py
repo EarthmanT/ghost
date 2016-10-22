@@ -768,6 +768,13 @@ class S3Storage(object):
         # init stuff
         raise NotImplementedError
 
+    def put(self, key):
+        """Insert the key and return its database id
+        """
+        #     id = self.client.insert_key(key)
+        # return id
+        raise NotImplementedError
+
     
 
 
