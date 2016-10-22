@@ -775,8 +775,30 @@ class S3Storage(object):
         # return id
         raise NotImplementedError
 
-    
+    def list(self):
+        """Return a list of all keys (not just key names, but rather the keys
+        themselves).
 
+        e.g.
+         {u'created_at': u'2016-10-10 08:31:53',
+          u'description': None,
+          u'metadata': None,
+          u'modified_at': u'2016-10-10 08:31:53',
+          u'name': u'aws',
+          u'uid': u'459f12c0-f341-413e-9d7e-7410f912fb74',
+          u'value': u'the_value'},
+         {u'created_at': u'2016-10-10 08:32:29',
+          u'description': u'my gcp token',
+          u'metadata': {u'owner': u'nir'},
+          u'modified_at': u'2016-10-10 08:32:29',
+          u'name': u'gcp',
+          u'uid': u'a51a0043-f241-4d52-93c1-266a3c5de15e',
+          u'value': u'the_value'}]
+
+        """
+
+        # return self.client.list()
+        raise NotImplementedError
 
 def _get_current_time():
     """Return a human readable unix timestamp formatted string
