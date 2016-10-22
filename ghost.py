@@ -70,6 +70,13 @@ try:
 except ImportError:
     ES_EXISTS = False
 
+try:
+    import boto3
+
+    S3_EXISTS = True
+except ImportError:
+    S3_EXISTS = False
+
 
 GHOST_HOME = os.path.join(os.path.expanduser('~'), '.ghost')
 STORAGE_DEFAULT_PATH_MAPPING = {

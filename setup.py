@@ -31,7 +31,8 @@ setup(
         'vault': ['hvac>=0.2.16'],
         'consul': ['requests>=2.11.1'],
         'sqlalchemy': ['sqlalchemy>=1.0.15'],
-        'elasticsearch': ['elasticsearch>=2.4.0']
+        'elasticsearch': ['elasticsearch>=2.4.0'],
+        's3': ['boto3']
     },
     classifiers=[
         'Programming Language :: Python',
