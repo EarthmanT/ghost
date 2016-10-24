@@ -834,6 +834,9 @@ class S3Storage(object):
         # return key is {}
         raise NotImplementedError
 
+    def _generate_bucket_name(self, name_size=12):
+        return ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(name_size))
+
 
 def _get_session(aws_access_key_id=None, aws_secret_access_key=None,
                  aws_session_token=None, profile_name=None):
