@@ -84,7 +84,8 @@ STORAGE_DEFAULT_PATH_MAPPING = {
     'sqlalchemy': os.path.join(GHOST_HOME, 'stash.sql'),
     'consul': 'http://127.0.0.1:8500',
     'vault': 'http://127.0.0.1:8200',
-    'elasticsearch': 'http://127.0.0.1:9200'
+    'elasticsearch': 'http://127.0.0.1:9200',
+    's3': 'http://127.0.0.1:4567'
 }
 
 PASSPHRASE_FILENAME = 'passphrase.ghost'
