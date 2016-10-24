@@ -773,7 +773,7 @@ class S3Storage(object):
 
     def init(self):
         # init stuff
-        raise NotImplementedError
+        self.client.create_bucket(Bucket=self.bucket_name, CreateBucketConfiguration=self.bucket_configuration)
 
     def put(self, key):
         """Insert the key and return its database id
