@@ -760,12 +760,16 @@ class S3Storage(object):
                  aws_access_key_id=None or os.environ.get('AWS_ACCESS_KEY_ID'),
                  aws_secret_access_key=None or os.environ.get('AWS_SECRET_ACCESS_KEY'),
                  aws_session_token=None or os.environ.get('AWS_SESSION_TOKEN'),
-                 profile_name=None or os.environ.get('AWS_PROFILE')):
+                 profile_name=None or os.environ.get('AWS_PROFILE'),
+                 bucket_name=None or self._generate_bucket_name(),
+                 bucket_configuration=None):
         if not S3_EXISTS:
             raise ImportError('boto3 must be installed first')
         # self.session = _get_session(...)
         session = _get_session(aws_access_key_id, aws_secret_access_key, aws_session_token, profile_name)
         self.client = session.client('s3')
+        self.bucket_name = bucket_name
+        self.bucket_configuration = bucket_configuration
 
     def init(self):
         # init stuff
