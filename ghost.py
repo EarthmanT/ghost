@@ -35,10 +35,11 @@ except ImportError:
     from urlparse import urljoin, urlparse
 
 import click
+import jinja2
 
 from tinydb import TinyDB, Query
-from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.primitives import hashes
+from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 try:
@@ -219,10 +220,14 @@ class Stash(object):
                     metadata=json.dumps(metadata)))))
         return key_id
 
-    def get(self, key_name, decrypt=True):
+    def get(self, key_name, decrypt=True, generate=None, output_path=None):
         """Return a key with its parameters if it was found.
         """
         self._assert_valid_passphrase()
+
+        if generate and not os.path.isfile(generate):
+            raise GhostError('The file to generate from could not be found')
+        output_path = output_path or generate + '.ghost-generated'
 
         key = self._storage.get(key_name).copy()
         if not key.get('value'):
@@ -232,6 +237,12 @@ class Stash(object):
 
         get_logger().info('[{0}] [GET] - {1}'.format(
             self._storage.db_path, json.dumps(dict(key_name=key_name))))
+
+        if generate:
+            generated_text = self._generate_from_template(
+                generate, key['value'])
+            with open(output_path, 'w') as output_file:
+                output_file.write(generated_text)
         return key
 
     def list(self):
@@ -376,6 +387,11 @@ class Stash(object):
                 raise GhostError(
                     'The passphrase provided is invalid for this stash. '
                     'Please provide the correct passphrase')
+
+    def _generate_from_template(self, template_path, value):
+        path, filename = os.path.split(template_path)
+        env = jinja2.Environment(loader=jinja2.FileSystemLoader(path or './'))
+        return env.get_template(filename).render(value)
 
 
 def migrate(src_path,
@@ -1015,6 +1031,9 @@ def put_key(key_name,
               is_flag=True,
               default=False,
               help='Retrieve the key without decrypting its value')
+@click.option('-g',
+              '--generate',
+              help='Jinja2 template file to generate from')
 @stash_option
 @passphrase_option
 @backend_option
@@ -1022,6 +1041,7 @@ def get_key(key_name,
             value_name,
             jsonify,
             no_decrypt,
+            generate,
             stash,
             passphrase,
             backend):
@@ -1043,7 +1063,10 @@ def get_key(key_name,
     storage = STORAGE_MAPPING[backend](db_path=stash_path)
     stash = Stash(storage, passphrase=passphrase)
     try:
-        record = stash.get(key_name=key_name, decrypt=not no_decrypt)
+        record = stash.get(
+            key_name=key_name,
+            decrypt=not no_decrypt,
+            generate=generate)
     except GhostError as ex:
         sys.exit(ex)
 
