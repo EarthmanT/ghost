@@ -24,6 +24,7 @@ import mock
 import pytest
 import click.testing as clicktest
 
+import moto
 import hvac  # NOQA
 import elasticsearch  # NOQA
 from sqlalchemy import sql
@@ -846,6 +847,14 @@ class TestElasticsearchStorage:
         assert len(key_list) == 1
         assert key_list[0] == BASE_TEST_KEY
         storage_tester.list(key_list)
+
+
+class TestS3Storage():
+
+    @mock_s3
+    def test_initialized(self):
+        s3 = ghost.S3Storage(bucket_name='a')
+        assert s3._
 
 
 @pytest.fixture
