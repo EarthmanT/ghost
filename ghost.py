@@ -40,6 +40,7 @@ from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
+
 try:
     from sqlalchemy import (Column,
                             Table,
@@ -48,24 +49,28 @@ try:
                             PickleType,
                             create_engine,
                             sql)
+
     SQLALCHEMY_EXISTS = True
 except ImportError:
     SQLALCHEMY_EXISTS = False
 
 try:
     import requests
+
     REQUESTS_EXISTS = True
 except ImportError:
     REQUESTS_EXISTS = False
 
 try:
     import hvac
+
     HVAC_EXISTS = True
 except ImportError:
     HVAC_EXISTS = False
 
 try:
     import elasticsearch
+
     ES_EXISTS = True
 except ImportError:
     ES_EXISTS = False
@@ -76,7 +81,6 @@ try:
     S3_EXISTS = True
 except ImportError:
     S3_EXISTS = False
-
 
 GHOST_HOME = os.path.join(os.path.expanduser('~'), '.ghost')
 STORAGE_DEFAULT_PATH_MAPPING = {
@@ -844,6 +848,11 @@ class S3Storage(object):
 
     def _generate_bucket_name(self, name_size=12):
         return ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(name_size))
+
+    @property
+    def is_initialized(self):
+        # TODO: actually check initialization
+        return True
 
 
 def _get_session(aws_access_key_id=None, aws_secret_access_key=None,
