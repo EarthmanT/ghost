@@ -792,7 +792,7 @@ class S3Storage(object):
         """
         #     id = self.client.insert_key(key)
         # return id
-        raise NotImplementedError
+        pass
 
     def list(self):
         """Return a list of all keys (not just key names, but rather the keys
@@ -817,7 +817,7 @@ class S3Storage(object):
         """
 
         # return self.client.list()
-        raise NotImplementedError
+        pass
 
     def get(self, key_name):
         """Return a dictionary consisting of the key itself
@@ -836,7 +836,7 @@ class S3Storage(object):
         # if not key:
         #     return {}
         # return key
-        raise NotImplementedError
+        pass
 
     def delete(self, key_name):
         """Delete the key and return true if the key was deleted, else false
@@ -844,7 +844,7 @@ class S3Storage(object):
         # self.client.delete(key_name)
         # key = self.get(key_name):
         # return key is {}
-        raise NotImplementedError
+        pass
 
     def _generate_bucket_name(self, name_size=12):
         return ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(name_size))
