@@ -766,8 +766,9 @@ class S3Storage(object):
                  # bucket_name=None or self._generate_bucket_name(),
                  bucket_configuration=None):
         if not S3_EXISTS:
-            raise ImportError('boto3 must be installed first')
-        # self.session = _get_session(...)
+            raise ImportError('boto3 and botocore must be installed first')
+        if not db_path:
+            db_path = self._generate_bucket_name()
         session = _get_session(aws_access_key_id, aws_secret_access_key, aws_session_token, profile_name)
         self.client = session.client('s3')
         # self.bucket_name = bucket_name
