@@ -811,8 +811,16 @@ class S3Storage(object):
 
         """
 
-        # return self.client.list()
-        pass
+        keys = self.client.list_objects_v2(Bucket=self.bucket_name)
+        # Get only the key name
+        keys = [key['Contents']['Key'] for key in keys]
+        keys_list = list()
+
+        for key_name in keys:
+            key = self.client.get_object(Bucket=self.bucket_name, Key=key_name)
+            keys_list.append(key['Object'])
+
+        return keys_list
 
     def get(self, key_name):
         """Return a dictionary consisting of the key itself
