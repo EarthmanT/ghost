@@ -884,10 +884,11 @@ def _get_session(aws_access_key_id=None, aws_secret_access_key=None,
     """Returns a new AWS session or the cached one
     """
     if _get_session._cached_session is None:
-        _get_session._cached_session = boto3.Session(aws_access_key_id=aws_access_key_id,
-                                                     aws_secret_access_key=aws_secret_access_key,
-                                                     aws_session_token=aws_session_token,
-                                                     profile_name=profile_name)
+        _get_session._cached_session = boto3.Session(
+                aws_access_key_id=aws_access_key_id,
+                aws_secret_access_key=aws_secret_access_key,
+                aws_session_token=aws_session_token,
+                profile_name=profile_name)
         return _get_session._cached_session
 
 
