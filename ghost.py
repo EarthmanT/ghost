@@ -782,7 +782,12 @@ class S3Storage(object):
         """
         #     id = self.client.insert_key(key)
         # return id
-        pass
+
+        self.client.put_object(
+                Body=key,
+                Bucket=self.bucket_name,
+                Key=key['name']
+        )
 
     def list(self):
         """Return a list of all keys (not just key names, but rather the keys
