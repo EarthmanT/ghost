@@ -844,7 +844,7 @@ class S3Storage(object):
 
         try:
             key = self.client.get_object(Bucket=self.bucket_name, Key=key_name)
-        except botocore.exceptions.ClientError as e:
+        except botocore.exceptions.ClientError:
             # If a client error is thrown, then check that it was a 404 error.
             # If it was a 404 error, then the object does not exist.
             pass
