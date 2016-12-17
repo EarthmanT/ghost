@@ -835,11 +835,16 @@ class S3Storage(object):
          u'value': u'the_value'}
 
         """
-        # key = self.client.get(key_name)
-        # if not key:
-        #     return {}
-        # return key
-        pass
+        key = {}
+
+        try:
+            key = self.client.get_object(Bucket=self.bucket_name, Key=key_name)
+        except botocore.exceptions.ClientError as e:
+            # If a client error is thrown, then check that it was a 404 error.
+            # If it was a 404 error, then the object does not exist.
+            pass
+
+        return key['Object']
 
     def delete(self, key_name):
         """Delete the key and return true if the key was deleted, else false
