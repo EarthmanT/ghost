@@ -775,13 +775,7 @@ class S3Storage(object):
 
     def init(self):
         # init stuff
-        # TODO: Check best object configurations for the init
-        # self.client.create_bucket(Bucket=self.bucket_name, CreateBucketConfiguration=self.bucket_configuration)
-        self.client.put_object(
-            Body='Empty Ghost stash',
-            Bucket = self.bucket_name,
-            Key='Ghost'
-        )
+        self.client.create_bucket(Bucket=self.bucket_name, CreateBucketConfiguration=self.bucket_configuration)
 
     def put(self, key):
         """Insert the key and return its database id
