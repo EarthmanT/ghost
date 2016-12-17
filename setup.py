@@ -32,7 +32,7 @@ setup(
         'consul': ['requests>=2.11.1'],
         'sqlalchemy': ['sqlalchemy>=1.0.15'],
         'elasticsearch': ['elasticsearch>=2.4.0'],
-        's3': ['boto3']
+        's3': ['boto3', 'botocore']
     },
     classifiers=[
         'Programming Language :: Python',

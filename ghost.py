@@ -49,38 +49,35 @@ try:
                             PickleType,
                             create_engine,
                             sql)
-
     SQLALCHEMY_EXISTS = True
 except ImportError:
     SQLALCHEMY_EXISTS = False
 
 try:
     import requests
-
     REQUESTS_EXISTS = True
 except ImportError:
     REQUESTS_EXISTS = False
 
 try:
     import hvac
-
     HVAC_EXISTS = True
 except ImportError:
     HVAC_EXISTS = False
 
 try:
     import elasticsearch
-
     ES_EXISTS = True
 except ImportError:
     ES_EXISTS = False
 
 try:
     import boto3
-
+    import botocore
     S3_EXISTS = True
 except ImportError:
     S3_EXISTS = False
+
 
 GHOST_HOME = os.path.join(os.path.expanduser('~'), '.ghost')
 STORAGE_DEFAULT_PATH_MAPPING = {
@@ -851,8 +848,16 @@ class S3Storage(object):
 
     @property
     def is_initialized(self):
-        # TODO: actually check initialization
-        return True
+        initialized = True
+        try:
+            self.client.head_bucket(Bucket=self.bucket_name)
+        except botocore.exceptions.ClientError as e:
+            # If a client error is thrown, then check that it was a 404 error.
+            # If it was a 404 error, then the bucket does not exist.
+            error_code = int(e.response['Error']['Code'])
+            if error_code == 404:
+                initialized = False
+        return initialized
 
 
 def _get_session(aws_access_key_id=None, aws_secret_access_key=None,
