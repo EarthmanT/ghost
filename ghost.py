@@ -759,8 +759,10 @@ class ElasticsearchStorage(object):
 class S3Storage(object):
     def __init__(self,
                  db_path=STORAGE_DEFAULT_PATH_MAPPING['s3'],
-                 aws_access_key_id=None or os.environ.get('AWS_ACCESS_KEY_ID'),
-                 aws_secret_access_key=None or os.environ.get('AWS_SECRET_ACCESS_KEY'),
+                 aws_access_key_id=None or os.environ.get(
+                         'AWS_ACCESS_KEY_ID'),
+                 aws_secret_access_key=None or os.environ.get(
+                         'AWS_SECRET_ACCESS_KEY'),
                  aws_session_token=None or os.environ.get('AWS_SESSION_TOKEN'),
                  profile_name=None or os.environ.get('AWS_PROFILE'),
                  bucket_configuration=None):
@@ -768,14 +770,17 @@ class S3Storage(object):
             raise ImportError('boto3 and botocore must be installed first')
         if not db_path:
             db_path = self._generate_bucket_name()
-        session = _get_session(aws_access_key_id, aws_secret_access_key, aws_session_token, profile_name)
+        session = _get_session(aws_access_key_id, aws_secret_access_key,
+                               aws_session_token, profile_name)
         self.client = session.client('s3')
         self.bucket_name = db_path
         self.bucket_configuration = bucket_configuration
 
     def init(self):
         # init stuff
-        self.client.create_bucket(Bucket=self.bucket_name, CreateBucketConfiguration=self.bucket_configuration)
+        self.client.create_bucket(
+                Bucket=self.bucket_name,
+                CreateBucketConfiguration=self.bucket_configuration)
 
     def put(self, key):
         """Insert the key and return its database id
@@ -786,8 +791,7 @@ class S3Storage(object):
         self.client.put_object(
                 Body=key,
                 Bucket=self.bucket_name,
-                Key=key['name']
-        )
+                Key=key['name'])
         return key['name']
 
     def list(self):
@@ -856,7 +860,10 @@ class S3Storage(object):
         pass
 
     def _generate_bucket_name(self, name_size=12):
-        return ''.join(random.SystemRandom().choice(string.ascii_letters + string.digits) for _ in range(name_size))
+        return ''.join(
+                random.SystemRandom().choice(
+                        string.ascii_letters + string.digits)
+                for _ in range(name_size))
 
     @property
     def is_initialized(self):
