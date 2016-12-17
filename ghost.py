@@ -788,6 +788,7 @@ class S3Storage(object):
                 Bucket=self.bucket_name,
                 Key=key['name']
         )
+        return key['name']
 
     def list(self):
         """Return a list of all keys (not just key names, but rather the keys
