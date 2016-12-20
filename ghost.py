@@ -766,6 +766,9 @@ class S3Storage(object):
                  aws_session_token=None or os.environ.get('AWS_SESSION_TOKEN'),
                  profile_name=None or os.environ.get('AWS_PROFILE'),
                  bucket_configuration=None):
+        """Initializes the storage client
+        :param db_path: The bucket name
+        """
         if not S3_EXISTS:
             raise ImportError('boto3 and botocore must be installed first')
         if not db_path:
