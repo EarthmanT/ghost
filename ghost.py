@@ -810,17 +810,8 @@ class S3Storage(object):
         return keys_list
 
     def get(self, key_name):
-        """Return a dictionary consisting of the key itself
-
-        e.g.
-        {u'created_at': u'2016-10-10 08:31:53',
-         u'description': None,
-         u'metadata': None,
-         u'modified_at': u'2016-10-10 08:31:53',
-         u'name': u'aws',
-         u'uid': u'459f12c0-f341-413e-9d7e-7410f912fb74',
-         u'value': u'the_value'}
-
+        """Gets the key.
+        :return: The key itself in a dictionary
         """
         key = {}
 
@@ -849,6 +840,9 @@ class S3Storage(object):
 
     @property
     def is_initialized(self):
+        """Check if bucket exists.
+        :return: True if initialized, False otherwise
+        """
         initialized = True
         try:
             self.client.head_bucket(Bucket=self.bucket_name)
