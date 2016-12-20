@@ -864,6 +864,13 @@ class TestS3Storage():
         assert storage.is_initialized is True
         storage_tester.is_initialized(storage.is_initialized)
 
+    @mock_s3
+    def test_init(self):
+        storage = ghost.S3Storage(db_path='bucket_name')
+        storage.init()
+        # If no errors are thrown, head bucket response is None
+        assert storage.client.head_bucket(Bucket='bucket_name') is None
+
 
 @pytest.fixture
 def test_stash(stash_path):
