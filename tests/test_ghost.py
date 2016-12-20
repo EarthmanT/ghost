@@ -856,9 +856,13 @@ class TestS3Storage():
                 ghost.ElasticsearchStorage()
 
     @mock_s3
-    def test_initialized(self):
-        s3 = ghost.S3Storage(bucket_name='a')
-        assert s3._
+    def test_is_initialized(self):
+        storage = ghost.S3Storage()
+        # Init initiated
+        assert storage.is_initialized is False
+        storage.init()
+        assert storage.is_initialized is True
+        storage_tester.is_initialized(storage.is_initialized)
 
 
 @pytest.fixture
