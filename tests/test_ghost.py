@@ -850,6 +850,10 @@ class TestElasticsearchStorage:
 
 
 class TestS3Storage():
+    def test_missing_requirement(self):
+        with mock.patch('ghost.S3_EXISTS', False):
+            with pytest.raises(ImportError):
+                ghost.ElasticsearchStorage()
 
     @mock_s3
     def test_initialized(self):
