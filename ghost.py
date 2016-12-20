@@ -777,17 +777,16 @@ class S3Storage(object):
         self.bucket_configuration = bucket_configuration
 
     def init(self):
-        # init stuff
+        """Create a bucket.
+        """
         self.client.create_bucket(
                 Bucket=self.bucket_name,
                 CreateBucketConfiguration=self.bucket_configuration)
 
     def put(self, key):
-        """Insert the key and return its database id
+        """Insert the key
+        :return: Key name
         """
-        #     id = self.client.insert_key(key)
-        # return id
-
         self.client.put_object(
                 Body=key,
                 Bucket=self.bucket_name,
@@ -795,29 +794,12 @@ class S3Storage(object):
         return key['name']
 
     def list(self):
-        """Return a list of all keys (not just key names, but rather the keys
-        themselves).
-
-        e.g.
-         {u'created_at': u'2016-10-10 08:31:53',
-          u'description': None,
-          u'metadata': None,
-          u'modified_at': u'2016-10-10 08:31:53',
-          u'name': u'aws',
-          u'uid': u'459f12c0-f341-413e-9d7e-7410f912fb74',
-          u'value': u'the_value'},
-         {u'created_at': u'2016-10-10 08:32:29',
-          u'description': u'my gcp token',
-          u'metadata': {u'owner': u'nir'},
-          u'modified_at': u'2016-10-10 08:32:29',
-          u'name': u'gcp',
-          u'uid': u'a51a0043-f241-4d52-93c1-266a3c5de15e',
-          u'value': u'the_value'}]
-
+        """Lists the keys
+        :return: Returns a list of all keys (not just key names, but rather
+        the keys themselves).
         """
-
         keys = self.client.list_objects_v2(Bucket=self.bucket_name)
-        # Get only the key name
+        # Filter out everything but the key names
         keys = [key['Contents']['Key'] for key in keys]
         keys_list = list()
 
