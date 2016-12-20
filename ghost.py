@@ -825,12 +825,17 @@ class S3Storage(object):
         return key['Object']
 
     def delete(self, key_name):
-        """Delete the key and return true if the key was deleted, else false
+        """Delete the key.
+        :return: True if it was deleted, False otherwise
         """
         # self.client.delete(key_name)
         # key = self.get(key_name):
         # return key is {}
-        pass
+        response = self.client.delete_object(
+                Bucket=self.bucket_name,
+                Key=key_name)
+
+        return response['DeleteMarker']
 
     def _generate_bucket_name(self, name_size=12):
         return ''.join(
