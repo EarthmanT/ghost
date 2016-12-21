@@ -15,6 +15,7 @@
 # TODO: Add categories
 # TODO: Add ghost backend which exports and loads stuff
 # TODO: Document how to export a key to a file using bash redirection
+from __future__ import unicode_literals
 
 import os
 import sys
@@ -25,9 +26,9 @@ import base64
 import random
 import string
 import logging
-import binascii
 import warnings
 from datetime import datetime
+
 
 try:
     from urllib.parse import urljoin, urlparse
@@ -129,7 +130,6 @@ class Stash(object):
         passphrase = passphrase or generate_passphrase(passphrase_size)
         self.passphrase = passphrase
 
-    # TODO: Consider base64 encoding instead of hexlification
     _key = None
 
     def init(self):
@@ -336,27 +336,26 @@ class Stash(object):
 
     def _encrypt(self, value):
         """Turn a json serializable value into an jsonified, encrypted,
-        hexa string.
+        base64 encoded string.
         """
-        value = json.dumps(value)
+        value = json.dumps(value).encode('utf8')
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            encrypted_value = self.cipher.encrypt(value.encode('utf8'))
-        hexified_value = binascii.hexlify(encrypted_value).decode('ascii')
-        return hexified_value
+            return self.cipher.encrypt(value).decode('utf8')
 
-    def _decrypt(self, hexified_value):
+    def _decrypt(self, encrypted_value):
         """The exact opposite of _encrypt
         """
-        encrypted_value = binascii.unhexlify(hexified_value)
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            jsonified_value = self.cipher.decrypt(
-                encrypted_value).decode('ascii')
-        value = json.loads(jsonified_value)
-        return value
+            value = self.cipher.decrypt(encrypted_value.encode('utf8'))
+        return json.loads(value.decode('utf8'))
 
     def _handle_existing_key(self, key_name, modify):
+        # TODO: get should return an empty dict for any empty key
+        # or a key that wasn't found. Then, we can remove the `or {}`
+        # Right now, this is just a safety mechanism in case anything
+        # that isn't a non-empty variable is returned.
         existing_key = self._storage.get(key_name) or {}
         if existing_key and modify:
             self._storage.delete(key_name)
@@ -704,8 +703,9 @@ class VaultStorage(object):
 
     @staticmethod
     def _convert_vault_record_to_ghost_record(vault_record):
-        ghost_record = dict(**vault_record['data'])
-        ghost_record['metadata'] = ghost_record.get('metadata') or {}
+        # ghost_record = dict(**vault_record['data'])
+        ghost_record = vault_record['data'].copy()
+        ghost_record['metadata'] = ghost_record.get('metadata', {})
         del vault_record['data']
         ghost_record['metadata'].update(vault_record)
         return ghost_record
