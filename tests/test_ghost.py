@@ -868,8 +868,9 @@ class TestS3Storage():
     def test_init(self):
         storage = ghost.S3Storage(db_path='bucket_name')
         storage.init()
-        # If no errors are thrown, head bucket response is None
-        assert storage.client.head_bucket(Bucket='bucket_name') is None
+        # If no errors are thrown, head bucket response is 200
+        assert storage.client.head_bucket(
+            Bucket='bucket_name')['ResponseMetadata']['HTTPStatusCode'] == 200
 
 
 @pytest.fixture
