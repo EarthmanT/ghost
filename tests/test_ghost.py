@@ -24,7 +24,7 @@ import mock
 import pytest
 import click.testing as clicktest
 
-import moto
+from moto import mock_s3
 import hvac  # NOQA
 import elasticsearch  # NOQA
 from sqlalchemy import sql
