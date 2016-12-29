@@ -765,7 +765,7 @@ class S3Storage(object):
                          'AWS_SECRET_ACCESS_KEY'),
                  aws_session_token=None or os.environ.get('AWS_SESSION_TOKEN'),
                  profile_name=None or os.environ.get('AWS_PROFILE'),
-                 bucket_configuration=None):
+                 bucket_configuration={}):
         """Initializes the storage client
         :param db_path: The bucket name
         """
