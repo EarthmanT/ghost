@@ -841,6 +841,7 @@ class S3Storage(object):
         return response['DeleteMarker']
 
     def _generate_bucket_name(self, name_size=12):
+        # TODO: generate only a-zA-Z0-9
         return ''.join(
                 random.SystemRandom().choice(
                         string.ascii_letters + string.digits)
